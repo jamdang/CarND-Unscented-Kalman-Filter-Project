@@ -16,6 +16,9 @@ public:
 
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
+  
+  // debug
+  int count_;
 
   ///* if this is false, laser measurements will be ignored (except for init)
   bool use_laser_;
@@ -85,6 +88,12 @@ public:
   virtual ~UKF();
 
   /**
+   * Initialization
+   */
+   
+   void Init(MeasurementPackage meas_package);
+  
+  /**
    * ProcessMeasurement
    * @param meas_package The latest measurement data of either radar or laser
    */
@@ -108,6 +117,17 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+  
+  /**
+   * self added
+   */
+  void AugmentedSigmaPoints(MatrixXd & Xsig_out);
+  void SigmaPointPrediction(const MatrixXd & Xsig_aug, const double delta_t);
+  void SigmaPointPrediction1(const MatrixXd & Xsig_aug, const double delta_t);
+  void PredictMeanAndCovariance();
+  void PredictRadarMeasurement(VectorXd & z_pred, MatrixXd & Zsig, MatrixXd & S);
+  void UpdateState(const int n_z, const VectorXd & z, const VectorXd & z_pred, const MatrixXd & Zsig, const MatrixXd S);
+  void PredictLidarMeasurement(VectorXd & z_pred, MatrixXd & Zsig, MatrixXd & S);
 };
 
 #endif /* UKF_H */

@@ -221,7 +221,9 @@ int main(int argc, char* argv[]) {
 
   // compute the accuracy (RMSE)
   Tools tools;
-  cout << "RMSE" << endl << tools.CalculateRMSE(estimations, ground_truth) << endl;
+  
+  VectorXd rmse = tools.CalculateRMSE(estimations, ground_truth);
+  cout << "RMSE" << endl << rmse << endl;
 
   // close files
   if (out_file_.is_open()) {
@@ -232,6 +234,13 @@ int main(int argc, char* argv[]) {
     in_file_.close();
   }
 
-  cout << "Done!" << endl;
+  cout << "Done" << endl;
+  
+  if (rmse(0) < .09 && rmse(1) < .10 && rmse(2) < .40 && rmse(3) < .30){
+	  cout << "Yeah!" << endl;
+  } else {
+	  cout << "Keep working ..." << endl;
+  }
+  
   return 0;
 }
